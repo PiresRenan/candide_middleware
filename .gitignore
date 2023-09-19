@@ -8,7 +8,6 @@ __pycache__/
 # Virtual environment (venv, virtualenv, conda, etc.)
 venv/
 env/
-*.env
 
 # Dependências geradas pelo pip ou conda
 # Você pode ajustar isso dependendo do seu gerenciador de pacotes
