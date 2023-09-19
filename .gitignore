@@ -1,0 +1,42 @@
+# Arquivos e diretórios gerados pelo Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+
+# Virtual environment (venv, virtualenv, conda, etc.)
+venv/
+env/
+*.env
+
+# Dependências geradas pelo pip ou conda
+# Você pode ajustar isso dependendo do seu gerenciador de pacotes
+*.egg-info/
+dist/
+build/
+lib/
+lib64/
+__pycache__/
+bin/
+include/
+share/
+
+# Logs e arquivos temporários
+*.log
+*.swp
+*.bak
+*.tmp
+*.db.sqlite3
+
+# Arquivos de configuração pessoal
+config.ini
+*.conf
+*.json
+
+# Arquivos e diretórios específicos do FastAPI
+# Você pode personalizar isso com base na estrutura do seu projeto
+__pycache__/
+migrations/
+alembic.ini
+alembic/
