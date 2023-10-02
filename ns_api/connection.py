@@ -53,106 +53,106 @@ class NS_Services:
                    'Cookie': 'NS_ROUTING_VERSION=LAGGING'}
         return headerx
 
-    def retrieve_client_data(self, cnpj=None):
-        if cnpj is not None:
-            url = "https://7586908.suitetalk.api.netsuite.com/services/rest/query/v1/suiteql?limit=1000"
-            data_raw = {
-                "q": f"SELECT custentity_cand_tipofrete_cli, custentity_acs_cfx_c_dfltpymntbnk_ls, custentity_acs_carteira, externalid, custentity_acs_transp_cli, terms "
-                     f"FROM customer "
-                     f"WHERE custentity_enl_cnpjcpf = '{cnpj}'"
-            }
-            with requests.post(url=url, headers=self.build_header(env=1), json=data_raw) as r:
-                result = r.json()
-            return result
-
-    def retrieve_client_data_retry(self, cnpj=None):
-        if len(cnpj) < 14:
-            cnpj = cnpj.zfill(14)
-        elif len(cnpj) > 14:
-            cnpj = cnpj[:14]
-        url = "https://7586908.suitetalk.api.netsuite.com/services/rest/query/v1/suiteql?limit=1000"
-        data_raw = {
-            "q": f"SELECT custentity_cand_tipofrete_cli, custentity_acs_cfx_c_dfltpymntbnk_ls, custentity_acs_carteira, externalid, custentity_acs_transp_cli, terms "
-                 f"FROM customer "
-                 f"WHERE custentity_enl_cnpjcpf='{cnpj}'"
-        }
-        with requests.post(url=url, headers=self.build_header(env=1), json=data_raw) as r:
-            result = r.json()
-        return result
-
-    def retrieve_client_data_last_try(self, cnpj=None):
-        if cnpj is not None:
-            url = "https://7586908.suitetalk.api.netsuite.com/services/rest/query/v1/suiteql?limit=1000"
-            data_raw = {
-                "q": f"SELECT custentity_cand_tipofrete_cli, custentity_acs_cfx_c_dfltpymntbnk_ls, custentity_acs_carteira, externalid, custentity_acs_transp_cli, terms "
-                     f"FROM customer "
-                     f"WHERE   LIKE %'{cnpj}'%"
-            }
-            with requests.post(url=url, headers=self.build_header(env=1), json=data_raw) as r:
-                result = r.json()
-            return result
-
-    def all_inactive_itens(self) -> str:
-        url = "https://7586908.suitetalk.api.netsuite.com/services/rest/query/v1/suiteql?limit=1000"
-        data_raw = {
-            "q": f"SELECT upccode FROM item WHERE isinactive='T'"
-        }
-        with requests.post(url=url, headers=self.build_header(env=1), json=data_raw) as r:
-            result = r.json()
-        itens = result['items']
-        filtered_items = []
-        for item in itens:
-            upccode = item.get('upccode', '')
-            if not upccode.startswith('C') and upccode.isdigit():
-                filtered_items.append(int(upccode))
-        final_str = '\n'.join(map(str, filtered_items))
-        return final_str
-
-    def get_price(self, eid=None):
-        url = "https://7586908.suitetalk.api.netsuite.com/services/rest/query/v1/suiteql?limit=1000"
-        data_raw = {
-            "q": f"SELECT custitem13 FROM item WHERE upccode='{eid}'"
-        }
-        with requests.post(url=url, headers=self.build_header(env=1), json=data_raw) as r:
-            result = r.json()
-        price = result['items'][0]['custitem13']
-        return price
-
-    def is_inactive(self, eid=None):
-        url = "https://7586908.suitetalk.api.netsuite.com/services/rest/query/v1/suiteql?limit=1000"
-        data_raw = {
-            "q": f"SELECT isinactive FROM item WHERE upccode='{eid}'"
-        }
-        with requests.post(url=url, headers=self.build_header(env=1), json=data_raw) as r:
-            result = r.json()
-        inactive = result['items'][0]['isinactive']
-        if inactive == "F":
-            return False
-        else:
-            return True
-
-    def insert_order(self, data_raw=None):
-        _url = "https://7586908.suitetalk.api.netsuite.com/services/rest/record/v1/salesorder"
-        data_raw = json.dumps(data_raw)
-        response = requests.request("POST", _url, headers=self.build_header(env=1, url=_url), data=data_raw)
-        return response
-
-    def get_promo(self, eid=None) -> bool:
-        url = "https://7586908.suitetalk.api.netsuite.com/services/rest/query/v1/suiteql?limit=1000"
-        data_raw = {
-            "q": f"SELECT custitem_acs_promo FROM item WHERE externalid='{eid}'"
-        }
-        with requests.post(url=url, headers=self.build_header(env=1), json=data_raw) as r:
-            result = r.json()
-        try:
-            promocao = float(result['items'][0]['custitem_acs_promo'])
-        except:
-            promocao = 0
-        try:
-            if promocao > 0:
-                return True
-            else:
-                return False
-        except Exception as e:
-            print(" 2.3.9 [Error] - Erro na captura da promoção. Erro: {}".format(e))
-            return False
+    # def retrieve_client_data(self, cnpj=None):
+    #     if cnpj is not None:
+    #         url = "https://7586908.suitetalk.api.netsuite.com/services/rest/query/v1/suiteql?limit=1000"
+    #         data_raw = {
+    #             "q": f"SELECT custentity_cand_tipofrete_cli, custentity_acs_cfx_c_dfltpymntbnk_ls, custentity_acs_carteira, externalid, custentity_acs_transp_cli, terms "
+    #                  f"FROM customer "
+    #                  f"WHERE custentity_enl_cnpjcpf = '{cnpj}'"
+    #         }
+    #         with requests.post(url=url, headers=self.build_header(env=1), json=data_raw) as r:
+    #             result = r.json()
+    #         return result
+    #
+    # def retrieve_client_data_retry(self, cnpj=None):
+    #     if len(cnpj) < 14:
+    #         cnpj = cnpj.zfill(14)
+    #     elif len(cnpj) > 14:
+    #         cnpj = cnpj[:14]
+    #     url = "https://7586908.suitetalk.api.netsuite.com/services/rest/query/v1/suiteql?limit=1000"
+    #     data_raw = {
+    #         "q": f"SELECT custentity_cand_tipofrete_cli, custentity_acs_cfx_c_dfltpymntbnk_ls, custentity_acs_carteira, externalid, custentity_acs_transp_cli, terms "
+    #              f"FROM customer "
+    #              f"WHERE custentity_enl_cnpjcpf='{cnpj}'"
+    #     }
+    #     with requests.post(url=url, headers=self.build_header(env=1), json=data_raw) as r:
+    #         result = r.json()
+    #     return result
+    #
+    # def retrieve_client_data_last_try(self, cnpj=None):
+    #     if cnpj is not None:
+    #         url = "https://7586908.suitetalk.api.netsuite.com/services/rest/query/v1/suiteql?limit=1000"
+    #         data_raw = {
+    #             "q": f"SELECT custentity_cand_tipofrete_cli, custentity_acs_cfx_c_dfltpymntbnk_ls, custentity_acs_carteira, externalid, custentity_acs_transp_cli, terms "
+    #                  f"FROM customer "
+    #                  f"WHERE   LIKE %'{cnpj}'%"
+    #         }
+    #         with requests.post(url=url, headers=self.build_header(env=1), json=data_raw) as r:
+    #             result = r.json()
+    #         return result
+    #
+    # def all_inactive_itens(self) -> str:
+    #     url = "https://7586908.suitetalk.api.netsuite.com/services/rest/query/v1/suiteql?limit=1000"
+    #     data_raw = {
+    #         "q": f"SELECT upccode FROM item WHERE isinactive='T'"
+    #     }
+    #     with requests.post(url=url, headers=self.build_header(env=1), json=data_raw) as r:
+    #         result = r.json()
+    #     itens = result['items']
+    #     filtered_items = []
+    #     for item in itens:
+    #         upccode = item.get('upccode', '')
+    #         if not upccode.startswith('C') and upccode.isdigit():
+    #             filtered_items.append(int(upccode))
+    #     final_str = '\n'.join(map(str, filtered_items))
+    #     return final_str
+    #
+    # def get_price(self, eid=None):
+    #     url = "https://7586908.suitetalk.api.netsuite.com/services/rest/query/v1/suiteql?limit=1000"
+    #     data_raw = {
+    #         "q": f"SELECT custitem13 FROM item WHERE upccode='{eid}'"
+    #     }
+    #     with requests.post(url=url, headers=self.build_header(env=1), json=data_raw) as r:
+    #         result = r.json()
+    #     price = result['items'][0]['custitem13']
+    #     return price
+    #
+    # def is_inactive(self, eid=None):
+    #     url = "https://7586908.suitetalk.api.netsuite.com/services/rest/query/v1/suiteql?limit=1000"
+    #     data_raw = {
+    #         "q": f"SELECT isinactive FROM item WHERE upccode='{eid}'"
+    #     }
+    #     with requests.post(url=url, headers=self.build_header(env=1), json=data_raw) as r:
+    #         result = r.json()
+    #     inactive = result['items'][0]['isinactive']
+    #     if inactive == "F":
+    #         return False
+    #     else:
+    #         return True
+    #
+    # def insert_order(self, data_raw=None):
+    #     _url = "https://7586908.suitetalk.api.netsuite.com/services/rest/record/v1/salesorder"
+    #     data_raw = json.dumps(data_raw)
+    #     response = requests.request("POST", _url, headers=self.build_header(env=1, url=_url), data=data_raw)
+    #     return response
+    #
+    # def get_promo(self, eid=None) -> bool:
+    #     url = "https://7586908.suitetalk.api.netsuite.com/services/rest/query/v1/suiteql?limit=1000"
+    #     data_raw = {
+    #         "q": f"SELECT custitem_acs_promo FROM item WHERE externalid='{eid}'"
+    #     }
+    #     with requests.post(url=url, headers=self.build_header(env=1), json=data_raw) as r:
+    #         result = r.json()
+    #     try:
+    #         promocao = float(result['items'][0]['custitem_acs_promo'])
+    #     except:
+    #         promocao = 0
+    #     try:
+    #         if promocao > 0:
+    #             return True
+    #         else:
+    #             return False
+    #     except Exception as e:
+    #         print(" 2.3.9 [Error] - Erro na captura da promoção. Erro: {}".format(e))
+    #         return False
