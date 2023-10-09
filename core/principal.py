@@ -2,13 +2,17 @@ import json
 
 from models import Nota
 
+
 class Core:
     def __init__(self):
-        data_emitente = {"CNPJ": ["62434436001703"], "xNome": ["CANDIDE INDUSTRIA E COMERCIO LIMITADA"], "xFant": ["CANDIDE INDUSTRIA"],
-                          "enderEmit": [{"xLgr": ["RUA TEODORO SAMPAIO"], "nro": ["399"], "xCpl": ["CONJ 57"], "xBairro": ["PINHEIROS"],
-                                         "cMun": ["3550308"], "xMun": ["SAO PAULO"], "UF": ["SP"], "CEP": ["05405000"], "cPais": ["1058"],
-                                         "xPais": ["BRASIL"], "fone": ["1133270277"]}],
-                          "IE": ["119760925119"], "CRT": ["3"]}
+        data_emitente = {"CNPJ": ["62434436001703"], "xNome": ["CANDIDE INDUSTRIA E COMERCIO LIMITADA"],
+                         "xFant": ["CANDIDE INDUSTRIA"],
+                         "enderEmit": [{"xLgr": ["RUA TEODORO SAMPAIO"], "nro": ["399"], "xCpl": ["CONJ 57"],
+                                        "xBairro": ["PINHEIROS"],
+                                        "cMun": ["3550308"], "xMun": ["SAO PAULO"], "UF": ["SP"], "CEP": ["05405000"],
+                                        "cPais": ["1058"],
+                                        "xPais": ["BRASIL"], "fone": ["1133270277"]}],
+                         "IE": ["119760925119"], "CRT": ["3"]}
         self.emitente = {"emit": [data_emitente]}
 
     def parse_json(self, data: Nota = None) -> dict:

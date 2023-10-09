@@ -22,13 +22,13 @@ class NS_Services:
         self.TOKEN_ID_SB1 = config('TOKEN_ID_SB1')
         self.TOKEN_SECRET_SB1 = config('TOKEN_SECRET_SB1')
 
-    def build_header(self, env=None, http_mtd=None, url=None):
+    def build_header(self, env=None, http_mtd=None, _url=None):
         if env is None:
             env = 2
         if http_mtd is None:
             http_mtd = "POST"
-        if url is None:
-            url = "https://7586908.suitetalk.api.netsuite.com/services/rest/query/v1/suiteql?limit=1000"
+        if _url is None:
+            _url = "https://7586908.suitetalk.api.netsuite.com/services/rest/query/v1/suiteql?limit=1000"
         if env == 1:
             consumer = oauth.Consumer(key=self.CONSUMER_ID, secret=self.CONSUMER_SECRET)
             token = oauth.Token(key=self.TOKEN_ID, secret=self.TOKEN_SECRET)
@@ -44,7 +44,7 @@ class NS_Services:
             'oauth_consumer_key': consumer.key,
             'oauth_token': token.key
         }
-        request = oauth.Request(method=http_mtd, url=url, parameters=params)
+        request = oauth.Request(method=http_mtd, url=_url, parameters=params)
         signature_method = SignatureMethod_HMAC_SHA256()
         request.sign_request(signature_method, consumer, token)
         header = request.to_header(realm)
@@ -52,6 +52,25 @@ class NS_Services:
         headerx = {'Authorization': headery, "Content-Type": "application/json", 'prefer': 'transient',
                    'Cookie': 'NS_ROUTING_VERSION=LAGGING'}
         return headerx
+
+    def create_purchase_order(self, environ=None):
+        if environ is not None:
+            if environ == 1:
+                url = "https://7586908.suitetalk.api.netsuite.com/services/rest/record/v1/purchaseOrder"
+            else:
+                url = "https://7586908-sb1.suitetalk.api.netsuite.com/services/rest/record/v1/purchaseOrder"
+        else:
+            url = ""
+        vendorId = "19617"
+        itemId = 4222
+        data_raw = {
+            "entity": vendorId,
+            "location": 3,
+            "item": {"items": [{"item": {"id": itemId}, "rate": 10}]}
+        }
+        with requests.post(url=url, headers=self.build_header(_url=url), json=data_raw) as r:
+            result = r
+        return result.status_code
 
     # def retrieve_client_data(self, cnpj=None):
     #     if cnpj is not None:
