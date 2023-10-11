@@ -17,20 +17,21 @@ class Core:
 
     def parse_json(self, data: Nota = None) -> dict:
         converted_to_dict = dict(data)
+        print(converted_to_dict)
         formatted_data = {}
         portal_nfe = json.dumps(converted_to_dict.get('NFe').get('$'))
         infNFe = converted_to_dict.get('NFe').get('infNFe')
-        print("Dados gerais: {}\n".format(infNFe))
+        # print("Dados gerais: {}\n".format(infNFe))
         destinatario = infNFe[0].get('dest')
-        print("Dados destinatario: {}\n".format(destinatario))
+        # print("Dados destinatario: {}\n".format(destinatario))
         detalhes = infNFe[0].get('det')
-        print("Dados detalhamento: {}\n".format(detalhes))
+        # print("Dados detalhamento: {}\n".format(detalhes))
         total = infNFe[0].get('total')
-        print("Dados total: {}\n".format(total))
+        # print("Dados total: {}\n".format(total))
         transportadora = infNFe[0].get('transp')
-        print("Dados transportadora: {}\n".format(transportadora))
+        # print("Dados transportadora: {}\n".format(transportadora))
         pagamento = infNFe[0].get('pag')
-        print("Dados pagamento: {}\n".format(pagamento))
+        # print("Dados pagamento: {}\n".format(pagamento))
         infComp = infNFe[0].get('infAdic')
-        print("Dados da informação complementar: {}\n".format(infComp))
+        # print("Dados da informação complementar: {}\n".format(infComp))
         return formatted_data
